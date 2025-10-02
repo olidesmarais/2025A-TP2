@@ -17,24 +17,39 @@ def analyser_menu(menu):
     """
     stats = {}
     
-    #  menu = {plat: (prix, temps_preparation, popularité)}
 
-    # TODO: Calculer le plat le plus rentable (ratio popularité/temps_preparation)
-    # Attention: gérer le cas où temps_preparation pourrait être 0
     plus_rentable = (None, 1000)
+    prix_total = 0
+    preparation_total = 0
+    nb_plats = 0
+    #  menu = {plat: (prix, temps_preparation, popularité)}
     for plat in menu:
-        popularite = menu.get(plat, False )[ 2 ]
+        prix = menu.get(plat, False )[ 0 ]
         preparation = menu.get(plat, False )[ 1 ]
+        popularite = menu.get(plat, False )[ 2 ]
+        nb_plats += 1
+
+        # TODO: Calculer le plat le plus rentable (ratio popularité/temps_preparation)
+        # Attention: gérer le cas où temps_preparation pourrait être 0
         if preparation == 0:
             continue
         rentabilite = popularite / preparation
         if plus_rentable[ 1 ] > rentabilite:
             plus_rentable = ( plat, rentabilite )
+        
+        # TODO: Calculer le prix moyen du menu
+        prix_total += prix
+        
+        # TODO: Calculer le temps de préparation moyen
+        preparation_total += preparation
+    
     stats["plat_plus_rentable"] = plus_rentable[0]
-    
-    # TODO: Calculer le prix moyen du menu
-    
-    # TODO: Calculer le temps de préparation moyen
+    if nb_plats > 0:
+        stats["prix_moyen"] = prix_total / nb_plats
+        stats["temps_moyen"] = preparation_total / nb_plats
+    else:
+        stats["prix_moyen"] = 0
+        stats["temps_moyen"] = 0
     
     print('stats', stats)
     return stats
