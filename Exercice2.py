@@ -77,7 +77,7 @@ def estimer_temps_total(liste_commandes_triee):
         temps_stats["temps_moyen"] = temps_total / nombre_commandes
     else:
         temps_stats["temps_moyen"] = 0
-        
+
     return temps_stats
 
 
@@ -95,7 +95,12 @@ def identifier_commandes_urgentes(liste_commandes, seuil_attente=30):
     commandes_urgentes = []
     
     # TODO: Identifier les commandes avec temps_attente > seuil
-    
+    for commande in liste_commandes:
+        numero = commande.get("numero", False)
+        temps_attente = commande.get("temps_attente", False)
+        if numero and temps_attente and temps_attente > seuil_attente:
+            commandes_urgentes.append(numero)
+
     return commandes_urgentes
 
 
