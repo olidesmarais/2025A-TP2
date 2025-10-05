@@ -69,7 +69,7 @@ def generer_alertes_stock(inventaire, seuil=10):
     for ingredient in inventaire:
         stock_actuel = inventaire[ ingredient ]
         if stock_actuel < seuil:
-            a_commander = max(0, 50 - stock_actuel)
+            a_commander = max(0, quantite_standard - stock_actuel)
             alertes[ ingredient ] = ( stock_actuel, a_commander )
     
     return alertes
@@ -120,8 +120,42 @@ def optimiser_achats(inventaire, menu_recettes, previsions_ventes, budget):
     
     # TODO: Calculer les besoins totaux selon les prévisions
     # Soustraire l'inventaire actuel
-    # Optimiser selon le budget disponible (prioriser les ingrédients critiques)
+    # print( 'besoins_totaux', besoins_totaux )
+    for ingredient in besoins_totaux:
+        if inventaire.get( ingredient, False ):
+            inventaire[ ingredient ] -= besoins_totaux[ ingredient ]
     
+    # Générer une alerte de stock pour identifier les besoin. 
+    alertes = generer_alertes_stock( inventaire )
+    # print( 'alertes', alertes)
+
+
+
+    # Optimiser selon le budget disponible (prioriser les ingrédients critiques)
+    prix_commande_optimale = 0
+    prix_commande_minimale = 0
+    for ingredient in alertes:
+        quantites = alertes[ ingredient ]
+        quantite_actuelle = quantites[ 0 ]
+        quantite_minimale = quantite_actuelle * -1 if quantite_actuelle < 0 else 0
+        quantite_optimale = quantites[ 1 ]
+        prix_commande_minimale += quantite_minimale * cout_ingredients[ ingredient ]
+        prix_commande_optimale += quantite_optimale * cout_ingredients[ ingredient ]
+
+    # print( prix_commande_optimale, prix_commande_minimale )
+
+    # Si le budget le permet, réaliser la commande optimale
+    if prix_commande_optimale <= budget:
+        for ingredient in alertes:
+            liste_achats[ ingredient ] = alertes[ ingredient ][ 1 ]
+    # Sinon, réaliser la commande minimale, si le budget le permet
+    elif prix_commande_minimale <= budget:
+        for ingredient in alertes:
+            quantite_actuelle = alertes[ ingredient ][ 0 ]
+            if quantite_actuelle < 0:
+                liste_achats[ ingredient ] = quantite_actuelle * -1
+
+    print('liste_achats', liste_achats)
     return liste_achats
 
 
