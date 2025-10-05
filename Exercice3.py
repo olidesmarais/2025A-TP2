@@ -44,7 +44,9 @@ def mettre_a_jour_inventaire(inventaire, recette, quantite=1):
     
     # TODO: Soustraire les ingrédients utilisés de l'inventaire
     # Multiplier par la quantité si plusieurs portions
-    
+    for ingredient in recette:
+        nouvel_inventaire[ ingredient ] = inventaire.get( ingredient, 0) - recette[ ingredient ] * quantite
+
     return nouvel_inventaire
 
 
