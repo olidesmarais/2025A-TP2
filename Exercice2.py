@@ -64,7 +64,20 @@ def estimer_temps_total(liste_commandes_triee):
     
     # TODO: Calculer le temps total et moyen
     # Chaque item prend en moyenne 3 minutes à préparer
+    total_items = 0
+    for commande in liste_commandes_triee:
+        nombre_items = commande.get("nombre_items", False)
+        if nombre_items:
+            total_items += nombre_items
     
+    temps_total = total_items * 3
+    nombre_commandes = len(liste_commandes_triee)
+    temps_stats["temps_total"] = temps_total
+    if nombre_commandes > 0:
+        temps_stats["temps_moyen"] = temps_total / nombre_commandes
+    else:
+        temps_stats["temps_moyen"] = 0
+        
     return temps_stats
 
 
