@@ -18,6 +18,12 @@ def verifier_disponibilite(inventaire, recette):
     
     # TODO: Vérifier pour chaque ingrédient de la recette
     # s'il est disponible en quantité suffisante dans l'inventaire
+    for ingredient in recette:
+        quantite_disponible = inventaire.get( ingredient, 0)
+        quantite_requise = recette[ ingredient ]
+        if quantite_disponible < quantite_requise:
+            peut_preparer = False
+            ingredients_manquants.append( ingredient )
     
     return peut_preparer, ingredients_manquants
 
