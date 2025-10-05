@@ -66,6 +66,11 @@ def generer_alertes_stock(inventaire, seuil=10):
     
     # TODO: Identifier les ingrédients avec stock < seuil
     # Suggérer une quantité à commander (ex: 50 unités - stock_actuel)
+    for ingredient in inventaire:
+        stock_actuel = inventaire[ ingredient ]
+        if stock_actuel < seuil:
+            a_commander = max(0, 50 - stock_actuel)
+            alertes[ ingredient ] = ( stock_actuel, a_commander )
     
     return alertes
 
