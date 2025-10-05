@@ -19,6 +19,12 @@ def calculer_priorite(commande):
     
     # TODO: Implémenter l'algorithme de priorité
     # Score = (temps_attente × 2) + (nombre_items × 1) + (client_vip × 10)
+    temps_attente = commande.get("temps_attente", False)
+    nombre_items = commande.get("nombre_items", False)
+    client_vip = commande.get("client_vip", -1)
+    if temps_attente and nombre_items and client_vip != -1:
+        client_vip_score = 1 if client_vip else 0
+        score = temps_attente * 2 + nombre_items * 1 + client_vip_score * 10
     
     return score
 
