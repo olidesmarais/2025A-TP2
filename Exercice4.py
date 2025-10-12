@@ -160,7 +160,29 @@ def generer_rapport_occupation(salle):
     }
     
     # TODO: Compter les différents types de tables
+    for rangee in salle:
+        for table in rangee:
+            match table[0]:
+                case 'L':
+                    rapport[ 'tables_libres_' + str(table[ 1 ])] += 1
+                case 'R':
+                    rapport[ 'tables_reservees_' + str(table[ 1 ])] += 1
+                case 'O':
+                    rapport[ 'tables_occupees_' + str(table[ 1 ])] += 1
+
     # Calculer le taux d'occupation (réservées + occupées) / total
+    tables_nonlibres = 0
+    total_tables = 0
+    for donnee in rapport:
+        # Considérer que les données sur les tables
+        if not donnee.startswith('tables'):
+            continue
+        # Additionner au total de tables
+        total_tables += rapport[ donnee ]
+        # Additionner aux tables non-libres si réservée ou occupée
+        if donnee.startswith('tables_reservees') or donnee.startswith('tables_occupees'):
+            tables_nonlibres += rapport[ donnee ]
+    rapport['taux_occupation'] = tables_nonlibres / total_tables
     
     return rapport
 
