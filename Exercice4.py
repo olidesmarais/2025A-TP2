@@ -124,7 +124,17 @@ def trouver_meilleure_table(salle, taille_groupe):
     meilleur_score = -1
     
     # TODO: Parcourir toutes les tables libres ('L2' ou 'L4')
-    # Calculer leur score et garder la meilleure
+    for idx_rangee, rangee in enumerate( salle ):
+        for idx_colonne, table in enumerate( rangee ):
+            if not table.startswith('L'):
+                continue
+            taille_table = int(table[ 1 ])
+            position = ( idx_rangee, idx_colonne )
+            # Calculer leur score et garder la meilleure
+            score = calculer_score_table( position, taille_table, taille_groupe, len(rangee) )
+            if score > meilleur_score:
+                meilleure_table = ( position, taille_table )
+                meilleur_score = score
     
     return meilleure_table
 
