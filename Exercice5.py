@@ -61,9 +61,17 @@ def categoriser_commentaires(liste_commentaires, mots_cles):
     categories = {'positifs': [], 'neutres': [], 'negatifs': []}
     
     # TODO: Analyser chaque commentaire
-    # Catégoriser selon le score obtenu
-    # Stocker le commentaire et son score dans la bonne catégorie
-    
+    for commentaire in liste_commentaires:
+        # Catégoriser selon le score obtenu
+        # analyse -> tuple: (score_total, mots_trouves)
+        score = analyser_commentaire( commentaire, mots_cles )[0]
+        # Stocker le commentaire et son score dans la bonne catégorie
+        if score >= 7:
+            categories['positifs'].append(( commentaire, score ))
+        elif 4 <= score <= 6:
+            categories['neutres'].append(( commentaire, score ))
+        elif score < 4:
+            categories['negatifs'].append(( commentaire, score ))
     return categories
 
 
