@@ -88,13 +88,23 @@ def calculer_score_table(position, taille_table, taille_groupe, nb_colonnes):
             -1 si la table ne convient pas
     """
     score = 0
-    
     # TODO: Calculer le score selon:
     # - Si taille_table < taille_groupe: retourner -1 (ne convient pas)
+    if taille_table < taille_groupe:
+        score = -1
+        return score
     # - Base: 100 points
+    score = 100
     # - Pénalité: -10 points par place vide (gaspillage)
+    score -= 10 * (taille_table - taille_groupe)
+    
+    rangee, colonne = position
     # - Bonus fenêtre: +20 points si colonne == 0 ou colonne == nb_colonnes-1
+    if colonne == 0 or colonne == nb_colonnes - 1:
+        score += 20
     # - Bonus position: +5 points si rangée < 3 (près de l'entrée)
+    if rangee < 3:
+        score += 5
     
     return score
 
