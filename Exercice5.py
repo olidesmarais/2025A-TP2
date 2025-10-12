@@ -118,9 +118,31 @@ def generer_rapport_satisfaction(categories, frequence_problemes):
     }
     
     # TODO: Calculer la satisfaction moyenne
+    commentaires_total = 0
+    somme_satisfaction = 0
+    for categorie in categories:
+        for commentaire in categories[ categorie ]:
+            # commentaire -> (description, score)
+            commentaires_total += 1
+            somme_satisfaction += commentaire[ 1 ]
+    rapport["satisfaction_moyenne"] = somme_satisfaction / commentaires_total
     # Calculer la distribution (% positifs, neutres, négatifs)
+    for categorie in categories:
+        commentaires_categorie = len(categories[categorie])
+        rapport['distribution'][categorie] = commentaires_categorie / commentaires_total * 100
+    # Ajout des points forts s'il y a plus de commentaires positifs que négatifs
+    if rapport['distribution']['positifs'] > rapport['distribution']['negatifs']:
+        rapport['points_forts'] = ['Service apprécié', 'Qualité reconnue']
     # Identifier les 3 principaux points d'amélioration (les 3 problèmes les plus fréquents)
-    
+    # Trier les problème par fréquence
+    frequence_problemes = dict(sorted( frequence_problemes.items(), key=lambda item: item[1], reverse=True))
+    compteur_pistes_amelioration = 0
+    for probleme in frequence_problemes:
+        rapport['points_amelioration'].append( probleme )
+        compteur_pistes_amelioration += 1
+        if compteur_pistes_amelioration == 3:
+            break
+
     return rapport
 
 
