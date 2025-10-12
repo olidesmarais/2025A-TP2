@@ -45,7 +45,7 @@ def initialiser_salle(nb_rangees, nb_colonnes, positions_tables):
     # Puis placer les tables aux positions indiquées
     # Format: 'L2' pour table libre de 2, 'L4' pour table libre de 4
     for table in positions_tables:
-        salle[ table[0] ][ table[1] ] = "L2" if table[2] == 2 else "L4"
+        salle[ table[0] ][ table[1] ] = "L" + table[2]
     
     return salle
 
