@@ -89,9 +89,13 @@ def identifier_problemes(commentaires_negatifs, mots_cles_negatifs):
     frequence_problemes = {}
     
     # TODO: Pour chaque commentaire négatif
-    # Compter le nombre d'apparition de chaque mot-clé négatif
+    for commentaire in commentaires_negatifs:
+        # Compter le nombre d'apparition de chaque mot-clé négatif
+        for mot_cle in mots_cles_negatifs:
+            if mot_cle in commentaire:
+                frequence_problemes[ mot_cle ] = frequence_problemes.get( mot_cle, 0) + 1
     # Retourner un dictionnaire trié par fréquence décroissante
-    
+    frequence_problemes = dict(sorted( frequence_problemes.items(), key=lambda item: item[1], reverse=True))
     return frequence_problemes
 
 
