@@ -117,45 +117,45 @@ def optimiser_achats(inventaire, menu_recettes, previsions_ventes, budget):
     """
     liste_achats = {}
     cout_ingredients = {'tomates': 0.5, 'fromage': 2.0, 'pâtes': 1.0, 'sauce': 1.5, 'pain': 0.8}
-    
+
     # TODO: Calculer les besoins totaux selon les prévisions
+    besoins_totaux = {}
+    for plat in previsions_ventes:
+        prevision_vente = previsions_ventes[ plat ]
+        recette = menu_recettes.get( plat, False )
+        if recette:
+            for ingredient in recette:
+                quantite_requise = recette[ ingredient ] * prevision_vente
+                if not besoins_totaux.get( ingredient, False ):
+                    besoins_totaux[ ingredient ] = quantite_requise
+                else: 
+                    besoins_totaux[ ingredient ] += quantite_requise
+    
     # Soustraire l'inventaire actuel
-    # print( 'besoins_totaux', besoins_totaux )
     for ingredient in besoins_totaux:
         if inventaire.get( ingredient, False ):
             inventaire[ ingredient ] -= besoins_totaux[ ingredient ]
     
     # Générer une alerte de stock pour identifier les besoin. 
     alertes = generer_alertes_stock( inventaire )
-    # print( 'alertes', alertes)
-
-
 
     # Optimiser selon le budget disponible (prioriser les ingrédients critiques)
-    prix_commande_optimale = 0
-    prix_commande_minimale = 0
+    # Suivre les quantités requises selon les alertes dans l'ordre d'apparition jusqu'à épuisement du budget.
+    # Structure alertes : {ingredient: (quantité_actuelle, quantité_à_commander)}
     for ingredient in alertes:
-        quantites = alertes[ ingredient ]
-        quantite_actuelle = quantites[ 0 ]
-        quantite_minimale = quantite_actuelle * -1 if quantite_actuelle < 0 else 0
-        quantite_optimale = quantites[ 1 ]
-        prix_commande_minimale += quantite_minimale * cout_ingredients[ ingredient ]
-        prix_commande_optimale += quantite_optimale * cout_ingredients[ ingredient ]
+        cout_unitaire = cout_ingredients[ ingredient ]
+        quantite_optimale = alertes[ingredient][1]
+        # Si on peut acheter la quantité optimale, procéder
+        if budget - quantite_optimale * cout_unitaire >= 0:
+            liste_achats[ ingredient ] = quantite_optimale
+            budget -= quantite_optimale * cout_unitaire
+        # Sinon, acheter le maximum permis par le budget
+        else:
+            quantite_resteinte = budget // cout_unitaire
+            liste_achats[ ingredient ] = quantite_resteinte
+            budget -= quantite_resteinte * cout_unitaire
 
-    # print( prix_commande_optimale, prix_commande_minimale )
-
-    # Si le budget le permet, réaliser la commande optimale
-    if prix_commande_optimale <= budget:
-        for ingredient in alertes:
-            liste_achats[ ingredient ] = alertes[ ingredient ][ 1 ]
-    # Sinon, réaliser la commande minimale, si le budget le permet
-    elif prix_commande_minimale <= budget:
-        for ingredient in alertes:
-            quantite_actuelle = alertes[ ingredient ][ 0 ]
-            if quantite_actuelle < 0:
-                liste_achats[ ingredient ] = quantite_actuelle * -1
-
-    print('liste_achats', liste_achats)
+    # Retourner la liste d'achat
     return liste_achats
 
 
