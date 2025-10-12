@@ -66,6 +66,8 @@ def marquer_reservation(salle, position, taille_groupe):
     
     # TODO: Marquer la table à la position donnée comme réservée (vérifier qu'elle est libre, on pourra utiliser la méthode startswith())
     # 'R2' pour table de 2 réservée, 'R4' pour table de 4
+    if nouvelle_salle[ position[0] ][ position[1] ].startswith('L'):
+        nouvelle_salle[ position[0] ][ position[1] ] = 'R' + str(taille_groupe)
     
     return nouvelle_salle
 
