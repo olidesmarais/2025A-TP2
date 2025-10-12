@@ -29,9 +29,19 @@ def analyser_commentaire(commentaire, mots_cles):
     mots_commentaire = commentaire_modifie.split()
     
     #TODO : Rechercher chaque mot-clé dans le commentaire
+    for mot_cle in mots_cles:
         # D'abord, vérifier la correspondance exacte dans la liste des mots
+        if mot_cle in mots_commentaire:
+            mots_trouves.append( mot_cle )
+            score_total += mots_cles[ mot_cle ]
         # Sinon, vérifier si le mot-clé est le début d'un mot du commentaire (cela permet de trouver "froid" dans "froide" ou "froids"), pour cela utiliser la méthode startswith().
+        else:
+            for mot_commentaire in mots_commentaire:
+                if mot_commentaire.startswith( mot_cle ):
+                    mots_trouves.append( mot_cle )
+                    score_total += mots_cles[ mot_cle ]
     # Borner le score final entre 0 et 10
+    score_total = max( 0, min( score_total, 10))
     
     return score_total, mots_trouves
 
