@@ -157,11 +157,30 @@ def calculer_tendance(historique_scores):
         str: 'amélioration', 'stable', ou 'dégradation'
     """
     tendance = 'stable'
+    augmentation_constante = True
+    diminution_constante = True
+    score_precedent = None
+
+    print( historique_scores )
     
     # TODO: Analyser l'évolution des scores
+    for historique in historique_scores:
+        score = historique[ 1 ]
+        if score_precedent:
+            if not score > score_precedent:
+                augmentation_constante = False
+            elif not score < score_precedent:
+                diminution_constante = False
+        score_precedent = score
     # Si augmentation constante: 'amélioration'
+    if augmentation_constante:
+        tendance = 'amélioration'
     # Si diminution constante: 'dégradation'
+    elif diminution_constante:
+        tendance = 'dégradation'
     # Sinon: 'stable'
+    else:
+        tendance = 'stable'
     
     return tendance
 
