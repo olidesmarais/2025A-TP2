@@ -81,7 +81,8 @@ def deplacer_serveur(grille, serveur_pos, direction):
     Args:
         grille (list): Grille du restaurant
         serveur_pos (tuple): Position actuelle
-        direction (str): 'z', 's', 'q', ou 'd'
+        direction (str): 'w', 's', 'a', ou 'd'
+        plutôt que direction (str): 'z', 's', 'q', ou 'd'
     
     Returns:
         tuple: Nouvelle position ou position actuelle si mouvement invalide
@@ -89,9 +90,19 @@ def deplacer_serveur(grille, serveur_pos, direction):
     nouvelle_pos = serveur_pos
     
     # TODO: Calculer la nouvelle position selon la direction
+    match direction:
+        case 'w':
+            nouvelle_pos = (serveur_pos[0], serveur_pos[1] - 1)
+        case 's':
+            nouvelle_pos = (serveur_pos[0], serveur_pos[1] + 1)
+        case 'a':
+            nouvelle_pos = (serveur_pos[0] - 1, serveur_pos[1])
+        case 'd':
+            nouvelle_pos = (serveur_pos[0] + 1, serveur_pos[1])
     # Vérifier que la position est valide (dans la grille)
+    nouvelle_pos = ( max(0, min( nouvelle_pos[0], len(grille[0]) - 1 )), max( 0, min(nouvelle_pos[1], len(grille) - 1 )))
+
     # Retourner la nouvelle position
-    
     return nouvelle_pos
 
 
@@ -216,7 +227,7 @@ if __name__ == '__main__':
     # Test déplacement
     print("\nTest déplacement:")
     pos_test = (2, 2)
-    nouvelle_pos = deplacer_serveur(grille, pos_test, 'd')
+    nouvelle_pos = deplacer_serveur(grille, pos_test, 's')
     print(f"Position (2,2) + droite → {nouvelle_pos}")
     
     # Décommenter pour jouer
