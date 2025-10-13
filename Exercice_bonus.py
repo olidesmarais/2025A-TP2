@@ -48,13 +48,28 @@ def initialiser_restaurant():
     tables_positions = []
     
     # TODO: Créer une grille 5x5
-    # 'K' = cuisine (position 0,2)
-    # 'T' = table vide
-    # '!' = table avec client en attente
-    # '_' = espace vide
-    # Placer 4 tables aux positions: (1,1), (1,3), (3,1), (3,3)
-    
     position_cuisine = (0, 2)
+    # Placer 4 tables aux positions: (1,1), (1,3), (3,1), (3,3)
+    position_tables = [(1,1), (1,3), (3,1), (3,3)]
+    # Les tables avec des clients en attente (« ! ») doivent être ajoutées aux positions (1,1) et (3,3).
+    position_attente = [(1,1), (3,3)]
+    for idx_rangee in range(5):
+        rangee = []
+        for idx_colonne in range(5):
+            position = (idx_rangee, idx_colonne)
+            # 'K' = cuisine (position 0,2)
+            if position == position_cuisine:
+                rangee.append('K')
+            # '!' = table avec client en attente
+            elif position in position_attente:
+                rangee.append('!')
+            # 'T' = table vide
+            elif position in position_tables:
+                rangee.append('L')
+            # '_' = espace vide
+            else:
+                rangee.append("_")
+        grille.append(rangee)
     
     return grille, position_cuisine, tables_positions
 
