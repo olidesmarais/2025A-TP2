@@ -92,13 +92,13 @@ def deplacer_serveur(grille, serveur_pos, direction):
     # TODO: Calculer la nouvelle position selon la direction
     match direction:
         case 'w':
-            nouvelle_pos = (serveur_pos[0], serveur_pos[1] - 1)
-        case 's':
-            nouvelle_pos = (serveur_pos[0], serveur_pos[1] + 1)
-        case 'a':
             nouvelle_pos = (serveur_pos[0] - 1, serveur_pos[1])
-        case 'd':
+        case 's':
             nouvelle_pos = (serveur_pos[0] + 1, serveur_pos[1])
+        case 'a':
+            nouvelle_pos = (serveur_pos[0], serveur_pos[1] - 1)
+        case 'd':
+            nouvelle_pos = (serveur_pos[0], serveur_pos[1] + 1)
     # Vérifier que la position est valide (dans la grille)
     nouvelle_pos = ( max(0, min( nouvelle_pos[0], len(grille[0]) - 1 )), max( 0, min(nouvelle_pos[1], len(grille) - 1 )))
 
@@ -193,13 +193,35 @@ def jouer():
     input()
     
     # TODO: Implémenter la boucle de jeu
-    # while tours < max_tours:
-    #     1. Afficher l'état
-    #     2. Lire l'entrée utilisateur
-    #     3. Traiter l'action (déplacement, prendre, livrer)
-    #     4. Générer nouveaux clients (tous les 3 tours)
-    #     5. Mettre à jour le score
-    #     6. Incrémenter tours
+    points_gagnes = 0
+    while tours < max_tours:
+        # 1. Afficher l'état
+        print("État du restaurant :")
+        for rangee in grille:
+            print(' '.join(rangee))
+        print('Position du serveur :', serveur_pos)
+        print('Serveur porte commande :', serveur_porte_commande)
+        print('Commandes en attentes :', commandes_en_attente)
+        print('Commande prete :', commandes_pretes)
+        # 2. Lire l'entrée utilisateur
+        action = input('Quelle action prenez-vous ? (déplacement : w, s, a ou d; prendre une commande : p; livrer une commande : l)')
+        # 3. Traiter l'action (déplacement, prendre, livrer)
+        match action:
+            case 'p':
+                resultat = prendre_commande(grille, serveur_pos, commandes_en_attente)
+                # resultat -> tuple: (succès, nouvelle_grille, nouvelles_commandes, points_gagnes)
+                if resultat[0]:
+                    grille = resultat[1]
+                    commandes_en_attente = resultat[2]
+                    points_gagnes += resultat[3]
+            case 'w' | 's' | 'a' | 'd':
+                serveur_pos = deplacer_serveur(grille, serveur_pos, action)
+
+        # 4. Générer nouveaux clients (tous les 3 tours)
+        # 5. Mettre à jour le score
+        score += points_gagnes
+        # 6. Incrémenter tours
+        tours += 1
     
     print(f"\n=== PARTIE TERMINÉE ===")
     print(f"Score final: {score}")
@@ -231,7 +253,7 @@ if __name__ == '__main__':
     print(f"Position (2,2) + droite → {nouvelle_pos}")
     
     # Décommenter pour jouer
-    # print("\n" + "="*30)
-    # print("Appuyez sur Entrée pour lancer le jeu...")
-    # input()
-    # score_final = jouer()
+    print("\n" + "="*30)
+    print("Appuyez sur Entrée pour lancer le jeu...")
+    input()
+    score_final = jouer()
