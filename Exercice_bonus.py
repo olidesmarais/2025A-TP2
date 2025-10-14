@@ -124,8 +124,30 @@ def prendre_commande(grille, serveur_pos, commandes_en_attente):
     nouvelles_commandes = commandes_en_attente[:]
     
     # TODO: Vérifier si une table avec client '!' est adjacente
+    position_commande = None
+    # En haut
+    if serveur_pos[0] - 1 >= 0 and nouvelle_grille[ serveur_pos[0] - 1 ][ serveur_pos[1] ] == '!':
+        position_commande = ( serveur_pos[0] - 1, serveur_pos[1])
+        succes = True
+    # En bas
+    elif serveur_pos[0] + 1 < len(nouvelle_grille) and nouvelle_grille[ serveur_pos[0] + 1][ serveur_pos[1] ] == '!':
+        position_commande = ( serveur_pos[0] + 1, serveur_pos[1])
+        succes = True
+    # À gauche
+    elif serveur_pos[1] - 1 >= 0 and nouvelle_grille[ serveur_pos[0] ][ serveur_pos[1] - 1] == '!':
+        position_commande = ( serveur_pos[0], serveur_pos[1] - 1)
+        succes = True
+    # À droite
+    elif serveur_pos[1] + 1 < len(nouvelle_grille[ serveur_pos[0] ]) and nouvelle_grille[ serveur_pos[0] ][ serveur_pos[1] + 1 ] == '!':
+        position_commande = ( serveur_pos[0], serveur_pos[1] + 1)
+        succes = True
+    
     # Si oui: changer '!' en 'T', ajouter position à commandes_en_attente
-    # Gagner 10 points
+    if position_commande:
+        nouvelle_grille[ position_commande[0] ][ position_commande[1] ] = 'T'
+        nouvelles_commandes.append(position_commande)
+        # Gagner 10 points
+        points += 10
     
     return succes, nouvelle_grille, nouvelles_commandes, points
 
