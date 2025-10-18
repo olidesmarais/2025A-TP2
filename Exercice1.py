@@ -17,7 +17,6 @@ def analyser_menu(menu):
     """
     stats = {}
     
-
     plus_rentable = (None, 0)
     prix_total = 0
     preparation_total = 0
