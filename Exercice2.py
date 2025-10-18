@@ -42,7 +42,7 @@ def trier_commandes(liste_commandes):
     # TODO: Implémenter un algorithme de tri (suggestion: tri à bulles)
     # Les commandes avec le score le plus élevé doivent être en premier
     nombre_commandes = len( liste_commandes )
-    for idx in range( nombre_commandes - 1):
+    for idx in range( nombre_commandes ):
         for jdx in range( nombre_commandes - idx - 1):
             if calculer_priorite( liste_commandes[jdx] ) < calculer_priorite( liste_commandes[jdx + 1] ):
                 liste_commandes[jdx], liste_commandes[jdx + 1] = liste_commandes[jdx + 1], liste_commandes[ jdx ]
