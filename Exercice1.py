@@ -26,16 +26,16 @@ def analyser_menu(menu):
         prix = menu.get(plat, False )[ 0 ]
         preparation = menu.get(plat, False )[ 1 ]
         popularite = menu.get(plat, False )[ 2 ]
-        nb_plats += 1
+        
 
         # TODO: Calculer le plat le plus rentable (ratio popularité/temps_preparation)
         # Attention: gérer le cas où temps_preparation pourrait être 0
-        if preparation == 0:
-            continue
-        rentabilite = popularite / preparation
-        if plus_rentable[ 1 ] < rentabilite:
-            plus_rentable = ( plat, rentabilite )
+        if preparation != 0:
+            rentabilite = popularite / preparation
+            if plus_rentable[ 1 ] < rentabilite:
+                plus_rentable = ( plat, rentabilite )
         
+        nb_plats += 1
         # TODO: Calculer le prix moyen du menu
         prix_total += prix
         
